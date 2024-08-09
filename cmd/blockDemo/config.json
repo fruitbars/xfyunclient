@@ -1,0 +1,12 @@
+{
+  "ase": {
+    "appid": "5d2c916e",
+    "apikey": "9b11ec8943deb2d8ffc3b1bdc229cd9f",
+    "apisecret": "17118e1aa87055bc0cc3536d5bacfcba"
+  },
+  "llm": {
+    "appid": "5ddb517c",
+    "apikey": "a82640492231a85e496887ccd0d4856f",
+    "apisecret": "b13daf2b954ea8f524aab17d6fd595ce"
+  }
+}
