@@ -1,39 +1,29 @@
-# 编译输出
+# If you prefer the allow list template instead of the deny list, see community template:
+# https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
+#
+cmd/blockDemo/blockDemo
+cmd/blockDemo/config.json
+.idea
+
+# Binaries for programs and plugins
 *.exe
 *.exe~
 *.dll
 *.so
 *.dylib
+
+# Test binary, built with `go test -c`
 *.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
 *.out
-cmd/blockDemo/blockDemo
 
+# Dependency directories (remove the comment below to include it)
+# vendor/
 
-# 日志文件
-*.log
+# Go workspace file
+go.work
+go.work.sum
 
-# 临时文件
-*.tmp
-*.temp
-*.bak
-*.swp
-
-
-# 编译器生成的二进制文件
-main
-
-# IDE和编辑器配置文件
-.vscode/
-.idea/
-*.sublime-workspace
-*.sublime-project
-
-# 操作系统生成的文件
-.DS_Store
-Thumbs.db
-
-# 项目依赖
-vendor/
-
-# 环境配置文件
+# env file
 .env
