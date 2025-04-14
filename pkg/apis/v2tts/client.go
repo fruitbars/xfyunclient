@@ -7,6 +7,7 @@ import (
 	"github.com/fruitbars/xfyunclient/pkg/ase"
 	"io"
 	"os"
+	"time"
 )
 
 // pkg/v2tts/client.go
@@ -63,8 +64,12 @@ func (c *V2TTSClient) SetDefaultTextEncoding(tte string) {
 	c.defaultTte = tte
 }
 
-// TextToSpeech 将文本转换为语音并返回音频数据
-func (c *V2TTSClient) TextToSpeech(text string, options ...TTSOption) ([]byte, error) {
+// TextToSpeechWithCallback 使用回调函数处理每一块音频数据
+func (c *V2TTSClient) TextToSpeechWithCallback(
+	text string,
+	audioCallback func(audioChunk []byte) error,
+	options ...TTSOption,
+) error {
 	// 创建基础请求
 	req := CreateDefaultV2TTSRequest(c.appID, text, c.defaultAue, c.defaultVcn, c.defaultTte)
 
@@ -81,8 +86,8 @@ func (c *V2TTSClient) TextToSpeech(text string, options ...TTSOption) ([]byte, e
 		ase.DefaultASEAlgorithm,
 	)
 
-	// 用于存储音频数据的通道
-	audioChan := make(chan []byte, 1)
+	// 用于通知处理完成或出错
+	doneChan := make(chan struct{})
 	errChan := make(chan error, 1)
 
 	// 回调函数处理响应
@@ -90,6 +95,13 @@ func (c *V2TTSClient) TextToSpeech(text string, options ...TTSOption) ([]byte, e
 		var resp V2TTSResponse
 		if err := json.Unmarshal(p, &resp); err != nil {
 			errChan <- fmt.Errorf("failed to unmarshal TTS response: %w", err)
+			return
+		}
+
+		// 检查是否是最后一条消息
+		if resp.Code == 0 && resp.Data.Status == 2 {
+			// 最后一条消息，处理完成
+			close(doneChan)
 			return
 		}
 
@@ -103,22 +115,59 @@ func (c *V2TTSClient) TextToSpeech(text string, options ...TTSOption) ([]byte, e
 			return
 		}
 
-		audioChan <- audioBytes
+		// 调用用户提供的回调函数处理这块音频数据
+		if err := audioCallback(audioBytes); err != nil {
+			errChan <- fmt.Errorf("audio callback failed: %w", err)
+			return
+		}
 	}
 
 	// 调用API
 	_, err := client.CallASEAPICallBack(req, callback)
 	if err != nil {
-		return nil, fmt.Errorf("TTS request failed: %w", err)
+		return fmt.Errorf("TTS request failed: %w", err)
 	}
 
-	// 等待结果
+	// 等待所有数据接收完成或出错
 	select {
-	case audioData := <-audioChan:
-		return audioData, nil
+	case <-doneChan:
+		// 所有数据已接收
+		return nil
 	case err := <-errChan:
+		return err
+	case <-time.After(30 * time.Second): // 设置超时
+		return fmt.Errorf("TTS request timed out")
+	}
+}
+
+// TextToSpeech 将文本转换为语音，返回完整的音频数据
+func (c *V2TTSClient) TextToSpeech(text string, options ...TTSOption) ([]byte, error) {
+	var audioBuffers [][]byte
+
+	// 定义回调函数，收集所有音频数据
+	collectCallback := func(audioChunk []byte) error {
+		audioBuffers = append(audioBuffers, audioChunk)
+		return nil
+	}
+
+	// 调用带回调的方法
+	err := c.TextToSpeechWithCallback(text, collectCallback, options...)
+	if err != nil {
 		return nil, err
 	}
+
+	// 合并所有收集到的音频数据
+	totalSize := 0
+	for _, buf := range audioBuffers {
+		totalSize += len(buf)
+	}
+
+	result := make([]byte, 0, totalSize)
+	for _, buf := range audioBuffers {
+		result = append(result, buf...)
+	}
+
+	return result, nil
 }
 
 // TextToSpeechToFile 将文本转换为语音并保存到文件
