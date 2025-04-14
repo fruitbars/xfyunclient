@@ -10,7 +10,9 @@ import (
 )
 
 func Translate(aseAppid, aseAPIKey, aseAPISecret string, serverUrl string, fromLang, toLang, text string) (string, error) {
-	client := ase.NewASEClient(serverUrl, aseAppid, aseAPIKey, aseAPISecret, "", "")
+	client := ase.NewASEHttpClient(serverUrl, aseAppid, aseAPIKey, aseAPISecret, "", "")
+
+	log.Println(client)
 
 	req := translation_v1_its.NewASETranslationRequest(aseAppid, fromLang, toLang, text)
 
@@ -19,6 +21,8 @@ func Translate(aseAppid, aseAPIKey, aseAPISecret string, serverUrl string, fromL
 		log.Println(err)
 		return "", err
 	}
+
+	log.Println(string(response))
 
 	var transRespone translation_v1_its.ASETranslationResult
 	json.Unmarshal(response, &transRespone)

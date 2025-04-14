@@ -16,7 +16,7 @@ import (
 
 func OcrBlockTest(aseAppid, aseAPIKey, aseAPISecret string, serverUrl string, language string, fname string) (string, error) {
 
-	client := ase.NewASEClient(serverUrl, aseAppid, aseAPIKey, aseAPISecret, "", "")
+	client := ase.NewASEHttpClient(serverUrl, aseAppid, aseAPIKey, aseAPISecret, "", "")
 
 	format, imageBase64, err := utils.ReadImageFile(fname)
 	log.Println(format)
@@ -67,7 +67,7 @@ func OcrBlockTest(aseAppid, aseAPIKey, aseAPISecret string, serverUrl string, la
 
 func OcrUniversal2024Test(aseAppid, aseAPIKey, aseAPISecret string, serverUrl string, language string, fname string) (string, error) {
 
-	client := ase.NewASEClient(serverUrl, aseAppid, aseAPIKey, aseAPISecret, "", "")
+	client := ase.NewASEHttpClient(serverUrl, aseAppid, aseAPIKey, aseAPISecret, "", "")
 
 	format, imageBase64, err := utils.ReadImageFile(fname)
 	log.Println(format)

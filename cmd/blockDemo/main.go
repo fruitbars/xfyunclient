@@ -46,7 +46,7 @@ func main() {
 	directory := "./OCRdata_xsq"
 	serverUrl := "https://cn-huabei-1.xf-yun.com/v1/private/s2a094db9"
 	lang := "ch_en"
-	outputExcel := "./ocr_results.xlsx"
+	outputExcel := "./result/ocr_results.xlsx"
 
 	if err := processDirectory(directory, serverUrl, lang, outputExcel); err != nil {
 		log.Fatalf("failed to process directory: %v", err)

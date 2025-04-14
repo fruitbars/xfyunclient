@@ -1,7 +1,7 @@
 package ocr_multi_lang
 
 import (
-	"aseclient/pkg/models/ocr_universal_2024/ocr_universal_2024_engine_text"
+	"xfyunclient/pkg/models/ocr_universal_2024/ocr_universal_2024_engine_text"
 )
 
 // GetBlockContents 返回每个Block合并后的文本内容

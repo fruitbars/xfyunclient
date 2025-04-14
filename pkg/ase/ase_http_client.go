@@ -11,11 +11,11 @@ import (
 )
 
 type ASEHttpClient struct {
-	*ASEClientBase
+	ASEClientBase
 }
 
 // NewASEClient initializes a new ASEClient instance
-func NewASEClient(serverURL, appid, apikey, apisecret, httpProto, aseAlgorithm string) *ASEHttpClient {
+func NewASEHttpClient(serverURL, appid, apikey, apisecret, httpProto, aseAlgorithm string) *ASEHttpClient {
 	baseClient := NewASEClientBase(serverURL, appid, apikey, apisecret, httpProto, aseAlgorithm)
 	return &ASEHttpClient{ASEClientBase: baseClient}
 }
@@ -37,12 +37,13 @@ func (c *ASEHttpClient) createASERequest(reqJsonByte []byte) (*http.Request, err
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("Accept", "application/json,version=1.0")
 
-	//log.Println(request.Header)
+	log.Println(request)
 
 	return request, nil
 }
 
 func (c *ASEHttpClient) CallASEAPIJson(req interface{}) ([]byte, error) {
+
 	jsonData, err := json.Marshal(req)
 	if err != nil {
 		return nil, err
@@ -59,7 +60,7 @@ func (c *ASEHttpClient) CallASEAPI(reqJsonByte []byte) ([]byte, error) {
 
 	utils.PrintHttpRequestHeader(request)
 
-	client := &http.Client{Timeout: c.timeOut}
+	client := &http.Client{Timeout: c.TimeOut}
 	start := time.Now()
 	response, err := client.Do(request)
 	if err != nil {

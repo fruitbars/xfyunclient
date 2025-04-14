@@ -2,13 +2,16 @@ package ase
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/websocket"
 	"log"
 	"time"
 )
 
+type WSCB func(p []byte)
+
 type ASEWebsocketClient struct {
-	*ASEClientBase
+	ASEClientBase
 	conn *websocket.Conn
 }
 
@@ -89,7 +92,7 @@ func (c *ASEWebsocketClient) ReadAllMessage() ([]ASEBaseResponse, error) {
 
 		msgSet = append(msgSet, message)
 
-		if message.Header.Code != 0 || message.Header.Status == 2 {
+		if message.Code != 0 || message.Data.Status == 2 {
 			log.Println("Closing connection")
 			c.Close()
 			break
@@ -98,6 +101,51 @@ func (c *ASEWebsocketClient) ReadAllMessage() ([]ASEBaseResponse, error) {
 		}
 	}
 	return msgSet, nil
+}
+
+func (c *ASEWebsocketClient) ReadAllMessageCallBack(cb WSCB) (string, error) {
+	var sid string
+
+	for {
+		_, msg, err := c.conn.ReadMessage()
+		if err != nil {
+			// Handle normal WebSocket close gracefully
+			if websocket.IsCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway, websocket.CloseNoStatusReceived) {
+				log.Println("WebSocket closed normally:", err)
+				return sid, nil
+			}
+			log.Println("Error reading WebSocket message:", err)
+			return sid, err
+		}
+
+		if cb != nil {
+			cb(msg)
+		}
+
+		var message ASEBaseResponse
+		if err := json.Unmarshal(msg, &message); err != nil {
+			log.Println("Failed to unmarshal JSON:", err)
+			continue
+		}
+
+		if sid == "" {
+			sid = message.Sid
+		}
+
+		if message.Code != 0 {
+			c.Close()
+			return sid, fmt.Errorf("code: %d, message: %s", message.Code, message.Message)
+		}
+
+		// status: 2 means end of stream
+		if message.Data.Status == 2 {
+			//			log.Println("Stream completed. Closing connection.")
+			c.Close()
+			break
+		}
+	}
+
+	return sid, nil
 }
 
 // CallASEAPI handles the complete WebSocket API call
@@ -111,4 +159,37 @@ func (c *ASEWebsocketClient) CallASEAPI(reqJsonByte []byte) ([]ASEBaseResponse, 
 	}
 
 	return c.ReadAllMessage()
+}
+
+func (c *ASEWebsocketClient) CallASEAPIJson(req interface{}) ([]ASEBaseResponse, error) {
+	jsonData, err := json.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+	return c.CallASEAPI(jsonData)
+}
+
+func (c *ASEWebsocketClient) CallASEAPICallBack(req interface{}, cb WSCB) (string, error) {
+	jsonData, err := json.Marshal(req)
+	if err != nil {
+		return "", err
+	}
+	log.Println(string(jsonData))
+	if err := c.Connect(); err != nil {
+		return "", err
+	}
+
+	if err := c.SendBinary(jsonData); err != nil {
+		return "", err
+	}
+
+	return c.ReadAllMessageCallBack(cb)
+}
+
+func (c *ASEWebsocketClient) CallASEAPIJsonCallBack(req interface{}) ([]ASEBaseResponse, error) {
+	jsonData, err := json.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+	return c.CallASEAPI(jsonData)
 }
