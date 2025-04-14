@@ -1,11 +1,11 @@
 package ase
 
 import (
+	"github.com/fruitbars/xfyunclient/pkg/utils"
 	"log"
 	"net/http"
 	"net/url"
 	"time"
-	"xfyunclient/pkg/utils"
 )
 
 type ASEClientBase struct {

@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/fruitbars/xfyunclient/pkg/interface/ocr_layout"
 	"log"
 	"os"
-	"xfyunclient/pkg/interface/ocr_layout"
 
 	"github.com/joho/godotenv"
 )

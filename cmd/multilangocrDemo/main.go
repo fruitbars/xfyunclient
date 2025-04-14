@@ -1,10 +1,10 @@
 package main
 
 import (
+	"github.com/fruitbars/xfyunclient/pkg/interface/ocr_universal"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
-	"xfyunclient/pkg/interface/ocr_universal"
 )
 
 func main() {

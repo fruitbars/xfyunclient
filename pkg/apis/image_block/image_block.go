@@ -13,12 +13,12 @@ import (
 	"strings"
 	"time"
 
-	"xfyunclient/pkg/ase"
-	"xfyunclient/pkg/models/ocr_multi_lang"
-	"xfyunclient/pkg/models/ocr_universal_2024/ocr_universal_2024_engine_text"
-	"xfyunclient/pkg/models/ocr_universal_2024/ocr_universal_2024_request"
-	"xfyunclient/pkg/models/ocr_universal_2024/ocr_universal_2024_response"
-	"xfyunclient/pkg/utils"
+	"github.com/fruitbars/xfyunclient/pkg/ase"
+	"github.com/fruitbars/xfyunclient/pkg/models/ocr_multi_lang"
+	"github.com/fruitbars/xfyunclient/pkg/models/ocr_universal_2024/ocr_universal_2024_engine_text"
+	"github.com/fruitbars/xfyunclient/pkg/models/ocr_universal_2024/ocr_universal_2024_request"
+	"github.com/fruitbars/xfyunclient/pkg/models/ocr_universal_2024/ocr_universal_2024_response"
+	"github.com/fruitbars/xfyunclient/pkg/utils"
 )
 
 // BlockRecognitionClient 定义了块识别客户端的接口

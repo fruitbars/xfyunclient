@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"xfyunclient/pkg/utils"
+	"github.com/fruitbars/xfyunclient/pkg/utils"
 )
 
 func main() {

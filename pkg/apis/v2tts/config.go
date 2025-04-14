@@ -48,7 +48,6 @@ func DefaultConfig() TTSConfig {
 func NewClientWithConfig(config TTSConfig) *V2TTSClient {
 	client := NewV2TTSClient(
 		config.AppID,
-		config.ASEAppID,
 		config.ASEAPIKey,
 		config.ASESecret,
 		config.ServerURL,

@@ -5,8 +5,8 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"github.com/fruitbars/xfyunclient/pkg/ase"
 	"os"
-	"xfyunclient/pkg/ase"
 )
 
 // 为了兼容性保留原有的函数名和签名，但内部实现使用新的架构

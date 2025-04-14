@@ -5,10 +5,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/fruitbars/xfyunclient/pkg/ase"
+	"github.com/fruitbars/xfyunclient/pkg/models/ocr_layout"
+	"github.com/fruitbars/xfyunclient/pkg/utils"
 	"log"
-	"xfyunclient/pkg/ase"
-	"xfyunclient/pkg/models/ocr_layout"
-	"xfyunclient/pkg/utils"
 )
 
 func OCRLayoutFile(aseAppid, aseAPIKey, aseAPISecret string, serverUrl string, fname string) (error, string) {

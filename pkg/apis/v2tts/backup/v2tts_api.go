@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 
-	"xfyunclient/pkg/ase"
+	"github.com/fruitbars/xfyunclient/pkg/ase"
 )
 
 // handleAudioMessageToFile decodes base64 audio from a TTS response and writes it to the provided file.

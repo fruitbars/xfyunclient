@@ -7,8 +7,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"xfyunclient/pkg/ase"
-	"xfyunclient/pkg/models/translation_v1_its"
+	"github.com/fruitbars/xfyunclient/pkg/ase"
+	"github.com/fruitbars/xfyunclient/pkg/models/translation_v1_its"
 )
 
 // TranslationClient 定义了翻译客户端的接口

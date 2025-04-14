@@ -11,9 +11,9 @@ import (
 	"os"
 	"strings"
 
-	"xfyunclient/pkg/ase"
-	"xfyunclient/pkg/models/ocr_layout"
-	"xfyunclient/pkg/utils"
+	"github.com/fruitbars/xfyunclient/pkg/ase"
+	"github.com/fruitbars/xfyunclient/pkg/models/ocr_layout"
+	"github.com/fruitbars/xfyunclient/pkg/utils"
 )
 
 // OCRClient 定义了OCR客户端的接口

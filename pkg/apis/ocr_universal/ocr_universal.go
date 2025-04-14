@@ -11,9 +11,9 @@ import (
 	"os"
 	"strings"
 
-	"xfyunclient/pkg/ase"
-	"xfyunclient/pkg/models/ocr_universal"
-	"xfyunclient/pkg/utils"
+	"github.com/fruitbars/xfyunclient/pkg/ase"
+	"github.com/fruitbars/xfyunclient/pkg/models/ocr_universal"
+	"github.com/fruitbars/xfyunclient/pkg/utils"
 )
 
 // OCRUniversalClient 定义了通用OCR客户端的接口

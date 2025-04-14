@@ -4,9 +4,9 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"github.com/fruitbars/xfyunclient/pkg/ase"
+	"github.com/fruitbars/xfyunclient/pkg/models/translation_v1_its"
 	"log"
-	"xfyunclient/pkg/ase"
-	"xfyunclient/pkg/models/translation_v1_its"
 )
 
 func Translate(aseAppid, aseAPIKey, aseAPISecret string, serverUrl string, fromLang, toLang, text string) (string, error) {

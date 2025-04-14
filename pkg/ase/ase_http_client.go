@@ -3,11 +3,11 @@ package ase
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/fruitbars/xfyunclient/pkg/utils"
 	"io"
 	"log"
 	"net/http"
 	"time"
-	"xfyunclient/pkg/utils"
 )
 
 type ASEHttpClient struct {

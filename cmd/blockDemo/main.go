@@ -4,13 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/fruitbars/xfyunclient/pkg/interface/image_block"
 	"github.com/sashabaranov/go-openai"
 	"github.com/xuri/excelize/v2"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
-	"xfyunclient/pkg/interface/image_block"
 )
 
 type Config struct {

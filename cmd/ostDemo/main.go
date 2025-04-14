@@ -1,10 +1,10 @@
 package main
 
 import (
+	"github.com/fruitbars/xfyunclient/pkg/apis/ost"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
-	"xfyunclient/pkg/apis/ost"
 )
 
 func main() {

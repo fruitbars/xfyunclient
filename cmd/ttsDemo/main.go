@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
+	"github.com/fruitbars/xfyunclient/pkg/apis/v2tts"
+	"github.com/fruitbars/xfyunclient/pkg/utils"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
-	"xfyunclient/pkg/apis/v2tts/backup"
-	"xfyunclient/pkg/utils"
 )
 
 func main() {
@@ -27,7 +27,7 @@ func main() {
 	serverUrl := "wss://tts-api.xfyun.cn/v2/tts"
 
 	// 调用 OCR 函数
-	sid, err := backup.V2TextToSpeechToFileDefault(appid, apiKey, apiSecret, serverUrl, "这真的有问题吗", "raw", "xiaoyan", "UTF8", "fanyi.pcm")
+	sid, err := v2tts.V2TextToSpeechToFileDefault(appid, apiKey, apiSecret, serverUrl, "这真的有问题吗", "raw", "xiaoyan", "UTF8", "fanyi.pcm")
 	if err != nil {
 		fmt.Println("Error occurred:", err)
 		return

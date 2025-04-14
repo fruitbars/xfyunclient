@@ -3,10 +3,10 @@ package ocr_universal
 import (
 	"encoding/base64"
 	"encoding/json"
+	"github.com/fruitbars/xfyunclient/pkg/ase"
+	"github.com/fruitbars/xfyunclient/pkg/models/ocr_universal"
+	"github.com/fruitbars/xfyunclient/pkg/utils"
 	"log"
-	"xfyunclient/pkg/ase"
-	"xfyunclient/pkg/models/ocr_universal"
-	"xfyunclient/pkg/utils"
 )
 
 func OcrUniversal(aseAppid, aseAPIKey, aseAPISecret string, serverUrl string, language string, fname string) (*ocr_universal.Response, error) {
