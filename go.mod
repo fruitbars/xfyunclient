@@ -1,4 +1,4 @@
-module xfyunclient
+module github.com/fruitbars/xfyunclient
 
 go 1.22.2
 
