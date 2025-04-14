@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/fruitbars/xfyunclient/pkg/interface/translation"
 	"log"
 	"os"
-	"xfyunclient/pkg/interface/translation"
 
 	"github.com/joho/godotenv"
 )
