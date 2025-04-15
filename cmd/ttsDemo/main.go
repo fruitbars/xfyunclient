@@ -9,6 +9,33 @@ import (
 	"os"
 )
 
+func ttsclientTest(appID, apiKey, apiSecret, serverUrl string) {
+	ttsConfig := v2tts.DefaultConfig()
+	ttsConfig.AppID = appID
+	ttsConfig.ASEAPIKey = apiKey
+	ttsConfig.ASESecret = apiSecret
+	ttsConfig.ServerURL = serverUrl
+	ttsConfig.DefaultAue = "raw" // PCM原始音频格式
+
+	client := v2tts.NewClientWithConfig(ttsConfig)
+
+	client.TextToSpeechToFile("这真的有问题吗", "ttssyn.pcm")
+
+	utils.PcmToWav("ttssyn.pcm", "ttssyn.pcm.wav", 16000, 1, 16)
+}
+
+func ttsAPItest(appID, apiKey, apiSecret, serverUrl string) {
+	sid, err := v2tts.V2TextToSpeechToFileDefault(appID, apiKey, apiSecret, serverUrl, "这真的有问题吗", "raw", "xiaoyan", "UTF8", "fanyi.pcm")
+	if err != nil {
+		fmt.Println("Error occurred:", err)
+		return
+	}
+
+	utils.PcmToWav("fanyi.pcm", "fanyi.wav", 16000, 1, 16)
+
+	log.Println("sid:", sid)
+}
+
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	// 加载.env 文件
@@ -26,14 +53,6 @@ func main() {
 
 	serverUrl := "wss://tts-api.xfyun.cn/v2/tts"
 
-	// 调用 OCR 函数
-	sid, err := v2tts.V2TextToSpeechToFileDefault(appid, apiKey, apiSecret, serverUrl, "这真的有问题吗", "raw", "xiaoyan", "UTF8", "fanyi.pcm")
-	if err != nil {
-		fmt.Println("Error occurred:", err)
-		return
-	}
+	ttsclientTest(appid, apiKey, apiSecret, serverUrl)
 
-	utils.PcmToWav("fanyi.pcm", "fanyi.wav", 16000, 1, 16)
-
-	log.Println("sid:", sid)
 }
