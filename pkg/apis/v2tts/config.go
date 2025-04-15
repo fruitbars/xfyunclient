@@ -6,7 +6,6 @@ package v2tts
 type TTSConfig struct {
 	// API配置
 	AppID     string // 应用ID
-	ASEAppID  string // ASE应用ID
 	ASEAPIKey string // ASE API密钥
 	ASESecret string // ASE密钥
 	ServerURL string // 服务器URL
@@ -27,7 +26,6 @@ func DefaultConfig() TTSConfig {
 	return TTSConfig{
 		// API默认配置留空，需要用户提供
 		AppID:     "",
-		ASEAppID:  "",
 		ASEAPIKey: "",
 		ASESecret: "",
 		ServerURL: "wss://tts-api.xfyun.cn/v2/tts",

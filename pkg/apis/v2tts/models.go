@@ -41,6 +41,20 @@ type V2TTSResponse struct {
 	} `json:"data"`
 }
 
+type AudioData struct {
+	// 解码后的音频数据
+	Data []byte
+
+	// 原始响应
+	Response V2TTSResponse
+
+	// 音频序号（按接收顺序）
+	SequenceNumber int
+
+	// 是否是最后一块数据
+	IsLast bool
+}
+
 // CreateDefaultV2TTSRequest 创建默认的TTS请求
 func CreateDefaultV2TTSRequest(appID, text, aue, vcn, tte string) V2TTSRequest {
 	textBase64 := base64.StdEncoding.EncodeToString([]byte(text))

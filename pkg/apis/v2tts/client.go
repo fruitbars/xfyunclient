@@ -3,6 +3,7 @@ package v2tts
 import (
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/fruitbars/xfyunclient/pkg/ase"
 	"io"
@@ -67,7 +68,7 @@ func (c *V2TTSClient) SetDefaultTextEncoding(tte string) {
 // TextToSpeechWithCallback 使用回调函数处理每一块音频数据
 func (c *V2TTSClient) TextToSpeechWithCallback(
 	text string,
-	audioCallback func(audioChunk []byte) error,
+	audioCallback func(data *AudioData) error,
 	options ...TTSOption,
 ) error {
 	// 创建基础请求
@@ -98,9 +99,27 @@ func (c *V2TTSClient) TextToSpeechWithCallback(
 			return
 		}
 
+		audioBytes, err := base64.StdEncoding.DecodeString(resp.Data.Audio)
+		if err != nil {
+			errChan <- errors.New(fmt.Sprintf("failed to decode base64 audio,sid: %s", resp.Sid))
+			return
+		}
+		sequenceNumber := 0
+		isLast := resp.Data.Status == 2
+		audioData := &AudioData{
+			Data:           audioBytes,
+			Response:       resp,
+			SequenceNumber: sequenceNumber,
+			IsLast:         isLast,
+		}
+
 		// 检查是否是最后一条消息
 		if resp.Code == 0 && resp.Data.Status == 2 {
 			// 最后一条消息，处理完成
+			if err := audioCallback(audioData); err != nil {
+				errChan <- fmt.Errorf("audio callback failed on final message: %w,sid: %s", err, resp.Sid)
+				return
+			}
 			close(doneChan)
 			return
 		}
@@ -109,23 +128,17 @@ func (c *V2TTSClient) TextToSpeechWithCallback(
 			return
 		}
 
-		audioBytes, err := base64.StdEncoding.DecodeString(resp.Data.Audio)
-		if err != nil {
-			errChan <- fmt.Errorf("failed to decode base64 audio: %w", err)
-			return
-		}
-
 		// 调用用户提供的回调函数处理这块音频数据
-		if err := audioCallback(audioBytes); err != nil {
+		if err := audioCallback(audioData); err != nil {
 			errChan <- fmt.Errorf("audio callback failed: %w", err)
 			return
 		}
 	}
 
 	// 调用API
-	_, err := client.CallASEAPICallBack(req, callback)
+	sid, err := client.CallASEAPICallBack(req, callback)
 	if err != nil {
-		return fmt.Errorf("TTS request failed: %w", err)
+		return fmt.Errorf("TTS request failed: %w,sid:%s", err, sid)
 	}
 
 	// 等待所有数据接收完成或出错
@@ -145,8 +158,13 @@ func (c *V2TTSClient) TextToSpeech(text string, options ...TTSOption) ([]byte, e
 	var audioBuffers [][]byte
 
 	// 定义回调函数，收集所有音频数据
-	collectCallback := func(audioChunk []byte) error {
-		audioBuffers = append(audioBuffers, audioChunk)
+	collectCallback := func(data *AudioData) error {
+		//audioChunk, err := base64.StdEncoding.DecodeString(resp.Data.Audio)
+
+		if len(data.Data) > 0 {
+			audioBuffers = append(audioBuffers, data.Data)
+		}
+
 		return nil
 	}
 
