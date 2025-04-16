@@ -13,11 +13,14 @@ func WithAue(aue string) TTSOption {
 }
 
 // WithStreamMode 设置是否开启流式返回
-func WithStreamMode(enable bool) TTSOption {
-	sfl := 0
-	if enable {
-		sfl = 1
+func WithStreamMode(sfl int) TTSOption {
+
+	return func(r *V2TTSRequest) {
+		r.Business.Sfl = sfl
 	}
+}
+func WithSfl(sfl int) TTSOption {
+
 	return func(r *V2TTSRequest) {
 		r.Business.Sfl = sfl
 	}
@@ -29,9 +32,19 @@ func WithAudioFormat(auf string) TTSOption {
 		r.Business.Auf = auf
 	}
 }
+func WithAuf(auf string) TTSOption {
+	return func(r *V2TTSRequest) {
+		r.Business.Auf = auf
+	}
+}
 
 // WithVoice 设置发音人
 func WithVoice(vcn string) TTSOption {
+	return func(r *V2TTSRequest) {
+		r.Business.Vcn = vcn
+	}
+}
+func WithVcn(vcn string) TTSOption {
 	return func(r *V2TTSRequest) {
 		r.Business.Vcn = vcn
 	}
@@ -77,11 +90,13 @@ func WithPitch(pitch int) TTSOption {
 }
 
 // WithBackgroundSound 设置是否开启背景音
-func WithBackgroundSound(enable bool) TTSOption {
-	bgs := 0
-	if enable {
-		bgs = 1
+func WithBackgroundSound(bgs int) TTSOption {
+	return func(r *V2TTSRequest) {
+		r.Business.Bgs = bgs
 	}
+}
+
+func WithBgs(bgs int) TTSOption {
 	return func(r *V2TTSRequest) {
 		r.Business.Bgs = bgs
 	}
@@ -94,8 +109,19 @@ func WithTextEncoding(tte string) TTSOption {
 	}
 }
 
-// WithRegionalAccent 设置地方口音
+func WithTte(tte string) TTSOption {
+	return func(r *V2TTSRequest) {
+		r.Business.Tte = tte
+	}
+}
+
 func WithRegionalAccent(reg string) TTSOption {
+	return func(r *V2TTSRequest) {
+		r.Business.Reg = reg
+	}
+}
+
+func WithReg(reg string) TTSOption {
 	return func(r *V2TTSRequest) {
 		r.Business.Reg = reg
 	}
@@ -103,6 +129,12 @@ func WithRegionalAccent(reg string) TTSOption {
 
 // WithNumberReading 设置数字发音方式
 func WithNumberReading(rdn string) TTSOption {
+	return func(r *V2TTSRequest) {
+		r.Business.Rdn = rdn
+	}
+}
+
+func WithRdn(rdn string) TTSOption {
 	return func(r *V2TTSRequest) {
 		r.Business.Rdn = rdn
 	}

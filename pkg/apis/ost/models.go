@@ -1,5 +1,11 @@
 package ost
 
+import (
+	"io"
+	"net/http"
+	"path"
+)
+
 // models.go - 数据结构定义
 // ====================================
 
@@ -209,4 +215,34 @@ type RawQueryResponse struct {
 	} `json:"data"`
 	Message string `json:"message"`
 	Sid     string `json:"sid"`
+}
+
+// 网络音频源（支持从 URL 加载音频）
+type URLAudioSource struct {
+	URL string
+}
+
+// Read 读取音频数据
+func (s *URLAudioSource) Read() ([]byte, error) {
+	resp, err := http.Get(s.URL)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	return io.ReadAll(resp.Body)
+}
+
+// Size 返回音频文件大小（使用 HEAD 请求）
+func (s *URLAudioSource) Size() (int64, error) {
+	resp, err := http.Head(s.URL)
+	if err != nil {
+		return 0, err
+	}
+	defer resp.Body.Close()
+	return resp.ContentLength, nil
+}
+
+// Name 返回音频文件名
+func (s *URLAudioSource) Name() string {
+	return path.Base(s.URL)
 }

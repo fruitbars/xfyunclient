@@ -19,7 +19,7 @@ func ttsclientTest(appID, apiKey, apiSecret, serverUrl string) {
 
 	client := v2tts.NewClientWithConfig(ttsConfig)
 
-	client.TextToSpeechToFile("这真的有问题吗", "ttssyn.pcm")
+	client.TextToSpeechToFile("这真的有问题吗", "ttssyn.pcm", v2tts.WithVoice("Lindsay"))
 
 	utils.PcmToWav("ttssyn.pcm", "ttssyn.pcm.wav", 16000, 1, 16)
 }

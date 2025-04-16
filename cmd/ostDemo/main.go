@@ -7,6 +7,43 @@ import (
 	"os"
 )
 
+func testRecognizeFile(appid, apiKey, apiSecret string) {
+	client := ost.NewClient(appid, apiKey, apiSecret)
+
+	// 识别音频文件
+	result, err := client.RecognizeFile("402_1744111790.mp4.wav", nil)
+	if err != nil {
+		log.Fatalf("识别失败: %v", err)
+	}
+
+	ufResult, err := ost.FormatAsUserFriendlyResult(result)
+	// 输出识别结果
+	log.Println("识别结果: ", ufResult.Data.Result.FullText)
+
+	// 输出识别结果
+	log.Println("识别结果: ", ufResult.Data.Result.FullText2)
+}
+
+func testRecognizeAudioURL(appid, apiKey, apiSecret string) {
+	client := ost.NewClient(appid, apiKey, apiSecret)
+
+	source := &ost.URLAudioSource{
+		URL: "http://172.31.243.85:8088/audio_sample_little.wav",
+	}
+	// 识别音频文件
+	result, err := client.RecognizeAudio(source, nil)
+	if err != nil {
+		log.Fatalf("识别失败: %v", err)
+	}
+
+	ufResult, err := ost.FormatAsUserFriendlyResult(result)
+	// 输出识别结果
+	log.Println("识别结果: ", ufResult.Data.Result.FullText)
+
+	// 输出识别结果
+	log.Println("识别结果: ", ufResult.Data.Result.FullText2)
+}
+
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	// 加载.env 文件
@@ -22,18 +59,5 @@ func main() {
 
 	log.Println("appid:", appid, "apiSecret:", apiSecret, ",apiKey:", apiKey)
 
-	client := ost.NewClient(appid, apiKey, apiSecret)
-
-	// 识别音频文件
-	result, err := client.RecognizeFile("402_1744111790.mp4.wav", nil)
-	if err != nil {
-		log.Fatalf("识别失败: %v", err)
-	}
-
-	ufResult, err := ost.FormatAsUserFriendlyResult(result)
-	// 输出识别结果
-	log.Println("识别结果: ", ufResult.Data.Result.FullText)
-
-	// 输出识别结果
-	log.Println("识别结果: ", ufResult.Data.Result.FullText2)
+	testRecognizeAudioURL(appid, apiKey, apiSecret)
 }
