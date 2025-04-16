@@ -30,6 +30,9 @@ func testRecognizeAudioURL(appid, apiKey, apiSecret string) {
 	source := &ost.URLAudioSource{
 		URL: "http://172.31.243.85:8088/audio_sample_little.wav",
 	}
+
+	log.Println(source.URL, source.Name())
+	log.Println(source.Size())
 	// 识别音频文件
 	result, err := client.RecognizeAudio(source, nil)
 	if err != nil {

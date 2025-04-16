@@ -114,7 +114,8 @@ func (r *recognizer) callOSTAPI(apiURL string, jsonData []byte, uri string) ([]b
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("API请求失败，状态码：%d", resp.StatusCode)
+		respBody, _ := io.ReadAll(resp.Body)
+		return nil, fmt.Errorf("API请求失败，状态码：%d,errbody:%s", resp.StatusCode, string(respBody))
 	}
 
 	// 读取响应体
