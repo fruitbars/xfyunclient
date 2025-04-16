@@ -54,13 +54,13 @@ func V2TextToSpeechToFile(
 
 	// 手动设置选项，以保持与原API相同的行为
 	options := []TTSOption{
-		WithStreamMode(sfl == 1),
+		WithSfl(sfl),
 		WithAudioFormat(auf),
 		WithSpeed(speed),
 		WithVolume(volume),
 		WithPitch(pitch),
-		WithBackgroundSound(bgs == 1),
-		WithRegionalAccent(reg),
+		WithBackgroundSound(bgs),
+		WithReg(reg),
 		WithNumberReading(rdn),
 	}
 
